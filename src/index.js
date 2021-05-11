@@ -1,8 +1,9 @@
 import express from "express";
 import multer from "multer";
 import {uploadGeneralPost} from "./modules/uploadPost.js";
-import deletePost from "./modules/deletePost.js"
 import cors from "cors";
+import fs from "fs-extra";
+import path from "path";
 
 var port = 5000;
 
@@ -44,6 +45,35 @@ app.post("/uploads", uploadMulter.single("streamfile"), async (req, res) => {
         res
             .status(500)
             .json({text: "Fail to upload process"});
+    }
+});
+
+app.get("/l/:postId", async (req, res) => {
+    try{
+
+        const postId = req.params.postId;
+
+        const dirPath = `uploads/${postId}`;
+        if(fs.existsSync(dirPath)){
+        
+        const postName = fs.readdirSync(dirPath)[0];
+        const postPath = path.join(dirPath,postName);
+
+        res.download(postPath, postName, (err) => {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log("download success");
+            }
+        });
+
+      } else {
+      console.log("There is no file");
+      res.status(500).json({ text: "error" });
+      }
+    }catch(err){
+    console.log(err);
+    res.status(500).json({ text: "Error" });
     }
 });
 
