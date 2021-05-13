@@ -2,12 +2,12 @@ import {gql} from "@apollo/client";
 
 export const ADD_POST_OBJ_MUTATION = gql`
   mutation writePost(
-    $contents: String
+    $categoryTitle: String
     $title: String
     ){
       writePost(
       title:$title
-      contents:$contents
+      categoryTitle:$categoryTitle
     ){
       ok,
       postId

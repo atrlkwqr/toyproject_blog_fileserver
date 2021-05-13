@@ -9,7 +9,7 @@ const addPostToDB = async ({req}) => {
         mutation: ADD_POST_OBJ_MUTATION,
         variables: {
             title: req.body.title,
-            contents: "tempContents"
+            categoryTitle: req.body.categoryTitle
         }
     });
 }
@@ -17,6 +17,7 @@ const addPostToDB = async ({req}) => {
 export const uploadGeneralPost = async ({req, res}) => {
 
     const {data} = await addPostToDB({req});
+
     
     const {
         writePost: writePostResponse
