@@ -1,21 +1,19 @@
 import fs from "fs-extra";
 
-const savePost = ({
-    dirName,
-    req
-    }) => {
-
-    try{
+const savePost = ({ dirName, req }) => {
+    try {
         const dirPath = `./uploads/${dirName}`;
         fs.mkdirSync(dirPath);
-        fs.writeFile(dirPath + "/" + req.body.title + ".html", req.body.streamfile);
+        fs.writeFile(
+            dirPath + "/" + req.body.title + ".html",
+            req.body.streamfile
+        );
 
         return true;
-    } catch(err){
+    } catch (err) {
         console.log(err);
         return false;
     }
-  }
+};
 
-
-  export default savePost;
+export default savePost;
