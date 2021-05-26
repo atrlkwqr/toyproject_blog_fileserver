@@ -8,3 +8,12 @@ export const ADD_POST_OBJ_MUTATION = gql`
         }
     }
 `;
+
+export const EDIT_PROFILE_OBJ_MUTATION = gql`
+    mutation editProfile($profileImage: String) {
+        editProfile(profileImage: $profileImage) {
+            ok
+            profileImageId
+        }
+    }
+`;

@@ -1,6 +1,9 @@
 import express from "express";
 import multer from "multer";
-import { uploadGeneralPost } from "./modules/uploadPost.js";
+import {
+    uploadGeneralPost,
+    uploadGeneralProfile,
+} from "./modules/uploadPost.js";
 import cors from "cors";
 import fs from "fs-extra";
 import path from "path";
@@ -41,6 +44,15 @@ app.post("/uploads", uploadMulter.single("streamfile"), async (req, res) => {
     }
 });
 
+app.post("/profile", uploadMulter.single("streamfile"), async (req, res) => {
+    const result = await uploadGeneralProfile({ req, res });
+    if (result === true) {
+        res.status(200).json({ text: "Success to upload" });
+    } else {
+        res.status(500).json({ text: "Fail to upload process" });
+    }
+});
+
 app.get("/l/:postId", async (req, res) => {
     try {
         const postId = req.params.postId;
@@ -51,6 +63,33 @@ app.get("/l/:postId", async (req, res) => {
             const postPath = path.join(dirPath, postName);
 
             res.download(postPath, postName, (err) => {
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.log("download success");
+                }
+            });
+        } else {
+            console.log("There is no file");
+            res.status(500).json({ text: "error" });
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ text: "Error" });
+    }
+});
+
+app.get("/p/:profileId", async (req, res) => {
+    try {
+        const profileId = req.params.profileId;
+
+        const dirPath = `profile/${profileId}`;
+
+        if (fs.existsSync(dirPath)) {
+            const profileName = fs.readdirSync(dirPath)[0];
+            const profilePath = path.join(dirPath, profileName);
+
+            res.download(profilePath, profileName, (err) => {
                 if (err) {
                     console.log(err);
                 } else {
